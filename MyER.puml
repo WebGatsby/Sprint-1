@@ -1,0 +1,53 @@
+@startuml
+hide circle
+
+entity User {
+  * ID: serial
+  Name: varchar
+  Phone: varchar
+  Email: varchar
+  registrationTime: date
+}
+
+entity UserHouse {
+  * userID: serial
+  * houseID: serial
+}
+
+entity House {
+  * ID: serial
+  name: varchar
+  address: varchar
+  registrationTime: date
+}
+
+entity Device {
+  * ID: serial
+  name: varchar
+  desc: varchar
+  registrationTime: date
+  + houseID: serial
+  + deviceTypeID: serial
+}
+
+entity DeviceType {
+  * ID: serial
+  name: varchar
+  desc: varchar
+}
+
+entity DeviceTelemetry {
+  * ID: serial
+  data: varchar
+  receiveDate: date
+  + deviceID: serial
+}
+
+' --- связи ---
+User ||--o{ UserHouse
+House ||--o{ UserHouse
+House ||--o{ Device
+Device ||--||  DeviceType
+Device ||--o{ DeviceTelemetry
+
+@enduml

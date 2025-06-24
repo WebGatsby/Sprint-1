@@ -1,0 +1,29 @@
+@startuml
+title Device Management Service Component Diagram
+
+top to bottom direction
+
+!include C4_Component.puml
+
+Container_Boundary(WarmHouseSystem, "Warm House System") {
+  Container(DevicesManagementService, "Devices Management Service", "Go")
+  Container(Database, "Database", "PostgreSQL", "Stores device data")
+}
+
+Container(DevicesManagementService, "Devices Management Service", "Go", "Manage devices, configurations and commands"){
+
+Component(DeviceApiHandler, "Device API Handler", "Handles API requests for device control and configuration")
+Component(CommandProcessor, "Command Processor", "Processes user commands and sends them to devices")
+Component(DeviceStateManager, "Device State Manager", "Tracks, updates, and provides current device states")
+Component(DeviceRepository, "Device Repository", "Stores and retrieves device data from PostgreSQL")
+
+}
+Rel(DeviceApiHandler, CommandProcessor, "Sends control/configuration commands")
+Rel(DeviceApiHandler, DeviceStateManager, "Reads and updates device state")
+Rel(CommandProcessor, api, "Sends commands to devices", "HTTPS")
+Rel(DeviceStateManager, DeviceRepository, "Reads/writes device state and metadata")
+Rel(CommandProcessor, DeviceRepository, "Reads device connection info")
+Rel(DeviceRepository, Database, "Reads/Writes device data")
+@enduml
+
+

@@ -1,0 +1,21 @@
+@startuml
+title User Info Service Component Diagram
+
+top to bottom direction
+
+!include C4_Component.puml
+
+Container_Boundary(WarmHouseSystem, "Warm House System") {
+  Container(UserInfoService, "User Info Service", "Go", "Manages user data") {
+
+    Component(UserApiHandler, "User API Handler", "Handles user info requests")
+    Component(UserRepository, "User Repository", "Accesses user data in DB")
+
+  }
+
+  Container(Database, "Database", "PostgreSQL", "Stores user and device data")
+}
+
+Rel(UserApiHandler, UserRepository, "Reads/Writes user info")
+Rel(UserRepository, Database, "Reads/Writes user data")
+@enduml

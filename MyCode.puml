@@ -1,0 +1,42 @@
+@startuml
+title Device State Manager Code Diagram
+
+top to bottom direction
+
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+class Device {
+  +String id
+  +String name
+  +String type
+  +DeviceState currentState
+  +void updateState(DeviceState newState)
+  +DeviceState getState()
+}
+
+class DeviceState {
+  +String status               // e.g. ON, OFF, LOCKED
+  +DateTime lastUpdated
+  +Map<String, String> parameters
+  +boolean isOnline()
+}
+
+class DeviceStateManager {
+  +DeviceState getDeviceState (String deviceId)
+  +void updateDeviceState (String deviceId, DeviceState newState)
+  +void synchronizeWithDevice (String deviceId)
+  +void persistState (Device device)
+}
+
+class DeviceRepository {
+  +Device findById(String deviceId)
+  +void save(Device device)
+  +List<Device> findAll()
+}
+
+DeviceStateManager "1" -- "0..*" Device : manages
+Device "1" -- "1" DeviceState : has
+DeviceStateManager "1" -- "1" DeviceRepository : uses
+DeviceRepository "1" -- "0..*" Device : stores
+
+@enduml

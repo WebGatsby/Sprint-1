@@ -1,0 +1,172 @@
+openapi: 3.0.3
+info:
+  title: Warm House Microservices API
+  version: 1.0.0
+  description: Internal API for managing users, houses, devices, and telemetry
+
+paths:
+
+  /users/{userId}:
+    get:
+      summary: Get user info
+      tags: [User Service]
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  phone:
+                    type: string
+                  email:
+                    type: string
+                  registrationTime:
+                    type: string
+                    format: date
+        '404':
+          description: User not found
+
+  /houses/{houseId}/devices:
+    get:
+      summary: Get devices for a house
+      tags: [Device Service]
+      parameters:
+        - name: houseId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of devices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    desc:
+                      type: string
+                    registrationTime:
+                      type: string
+                      format: date
+                    houseID:
+                      type: integer
+                    deviceTypeID:
+                      type: integer
+        '404':
+          description: House not found
+
+  /devices:
+    post:
+      summary: Register a new device
+      tags: [Device Service]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, desc, houseID, deviceTypeID]
+              properties:
+                name:
+                  type: string
+                desc:
+                  type: string
+                houseID:
+                  type: integer
+                deviceTypeID:
+                  type: integer
+      responses:
+        '201':
+          description: Device registered
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  desc:
+                    type: string
+                  registrationTime:
+                    type: string
+                    format: date
+                  houseID:
+                    type: integer
+                  deviceTypeID:
+                    type: integer
+        '400':
+          description: Invalid input
+
+  /devices/{deviceId}/telemetry:
+    get:
+      summary: Get telemetry for a device
+      tags: [Telemetry Service]
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Telemetry list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    data:
+                      type: string
+                    receiveDate:
+                      type: string
+                      format: date
+                    deviceID:
+                      type: integer
+        '404':
+          description: Device not found
+
+  /device-types:
+    get:
+      summary: List available device types
+      tags: [Device Service]
+      responses:
+        '200':
+          description: List of types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    desc:
+                      type: string

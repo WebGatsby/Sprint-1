@@ -6,13 +6,11 @@ top to bottom direction
 !include C4_Context.puml
 
 Person(user, "User", "A user of smart devices")
-Person(admin, "Administrator", "An administrator managing the system")
 System(FitLifeSystem, "Warm House System", "Device management, data monitoring from devices, device addition")
 
-System_Ext(api, "API", "API for third party devices")
+System_Ext(api, "Devices", "Smart home devices")
 
 Rel(user, FitLifeSystem, "Uses the system")
-Rel(admin,FitLifeSystem,"Manages the system")
 Rel(FitLifeSystem,api,"Fetches device data")
 
 @enduml

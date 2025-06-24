@@ -1,0 +1,26 @@
+@startuml
+title Devices Monitoring Service Component Diagram
+
+top to bottom direction
+
+!include C4_Component.puml
+
+Container_Boundary(WarmHouseSystem, "Warm House System") {
+  Container(DevicesMonitoringService, "Devices Monitoring Service", "Go", "Monitors device telemetry") {
+
+    Component(MonitoringApiHandler, "Monitoring API Handler", "Handles requests for telemetry and status")
+    Component(DeviceTelemetryFetcher, "Device Telemetry Fetcher", "Pulls telemetry from devices")
+    Component(MonitoringRepository, "Monitoring Repository", "Stores and retrieves telemetry data")
+
+  }
+
+  Container(Database, "Database", "PostgreSQL", "Stores user and device data")
+  System_Ext(api, "Devices", "Smart home devices")
+}
+
+Rel(MonitoringApiHandler, DeviceTelemetryFetcher, "Requests latest telemetry")
+Rel(DeviceTelemetryFetcher, api, "Fetches telemetry", "HTTPS")
+Rel(DeviceTelemetryFetcher, MonitoringRepository, "Stores telemetry")
+Rel(MonitoringApiHandler, MonitoringRepository, "Reads telemetry")
+Rel(MonitoringRepository, Database, "Reads/Writes telemetry data")
+@enduml
