@@ -1,6 +1,27 @@
 version: '3.8'
 
 services:
+  user-info-service:
+    build: ./user-info-service
+    ports:
+      - "9081:8081"
+    networks:
+      - smarthome-network
+
+  device-monitoring-service:
+    build: ./device-monitoring-service
+    ports:
+      - "8082:8082"
+    networks:
+      - smarthome-network
+      
+  device-management-service:
+    build: ./device-management-service
+    ports:
+      - "8083:8083"
+    networks:
+      - smarthome-network
+      
   postgres:
     image: postgres:16-alpine
     container_name: smarthome-postgres
